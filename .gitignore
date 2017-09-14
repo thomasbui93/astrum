@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+dist/**/*.js
+dist/**/*.map
+.idea
+node_modules
+*~
+.DS_Store
+env.yaml

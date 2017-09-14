@@ -1,0 +1,23 @@
+{
+  "plugins": [
+    "node"
+  ],
+  "extends": [
+    "airbnb-base/legacy",
+    "plugin:node/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "node/exports-style": [
+      "error",
+      "module.exports"
+    ],
+    "node/no-unsupported-features": 0
+  },
+  "env": {
+    "es6": true
+  }
+}
