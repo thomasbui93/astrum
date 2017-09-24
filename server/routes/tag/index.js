@@ -1,5 +1,6 @@
 import routeSchema from './schema.json';
 import TagApi from '../../models/notes/tag';
+import {verifyToken} from "../../services/notes/user-service";
 
 export default (app, options, next) => {
   /**
@@ -9,6 +10,7 @@ export default (app, options, next) => {
     method: 'GET',
     url: '/',
     schema: routeSchema.index,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       try {
         const { docs } = await TagApi.findAll();
@@ -27,6 +29,7 @@ export default (app, options, next) => {
     method: 'GET',
     url: '/:key',
     schema: routeSchema.read,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -50,6 +53,7 @@ export default (app, options, next) => {
     method: 'POST',
     url: '/',
     schema: routeSchema.create,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       try {
         const tag = new TagApi(request.body);
@@ -69,6 +73,7 @@ export default (app, options, next) => {
     method: 'PUT',
     url: '/:key',
     schema: routeSchema.update,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -88,6 +93,7 @@ export default (app, options, next) => {
     method: 'DELETE',
     url: '/:key',
     schema: routeSchema.remove,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -106,6 +112,7 @@ export default (app, options, next) => {
   app.route({
     method: 'DELETE',
     url: '/truncate',
+    beforeHandler: verifyToken,
     schema: routeSchema.remove,
     handler: async (request, reply) => {
       try {

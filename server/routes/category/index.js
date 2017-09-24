@@ -1,6 +1,6 @@
 import routeSchema from './schema.json';
 import CategoryApi from '../../models/notes/category';
-
+import {verifyToken} from "../../services/notes/user-service";
 export default (app, options, next) => {
   /**
    * Get collection of categories
@@ -9,6 +9,7 @@ export default (app, options, next) => {
     method: 'GET',
     url: '/',
     schema: routeSchema.index,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       try {
         const { docs } = await CategoryApi.findAll();
@@ -27,6 +28,7 @@ export default (app, options, next) => {
     method: 'GET',
     url: '/:key',
     schema: routeSchema.read,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -51,6 +53,7 @@ export default (app, options, next) => {
     method: 'POST',
     url: '/',
     schema: routeSchema.create,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       try {
         const category = new CategoryApi(request.body);
@@ -70,6 +73,7 @@ export default (app, options, next) => {
     method: 'PUT',
     url: '/:key',
     schema: routeSchema.update,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -89,6 +93,7 @@ export default (app, options, next) => {
     method: 'DELETE',
     url: '/:key',
     schema: routeSchema.remove,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -108,6 +113,7 @@ export default (app, options, next) => {
     method: 'DELETE',
     url: '/truncate',
     schema: routeSchema.remove,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       try {
         await CategoryApi.remove();

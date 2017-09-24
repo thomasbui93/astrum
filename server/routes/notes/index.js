@@ -2,6 +2,7 @@ import routeSchema from './schema.json';
 import NoteApi from '../../models/notes/note';
 import TagApi from '../../models/notes/tag';
 import CategoryApi from '../../models/notes/category';
+import {verifyToken} from "../../services/notes/user-service";
 
 export default (app, options, next) => {
   /**
@@ -11,6 +12,7 @@ export default (app, options, next) => {
     method: 'GET',
     url: '/',
     schema: routeSchema.index,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { page = 1} = request.query;
       try {
@@ -30,6 +32,7 @@ export default (app, options, next) => {
     method: 'GET',
     url: '/:key',
     schema: routeSchema.read,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -49,6 +52,7 @@ export default (app, options, next) => {
     method: 'POST',
     url: '/',
     schema: routeSchema.create,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       try {
         let rawData = request.body;
@@ -71,6 +75,7 @@ export default (app, options, next) => {
     method: 'PUT',
     url: '/:key',
     schema: routeSchema.update,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {
@@ -90,6 +95,7 @@ export default (app, options, next) => {
     method: 'DELETE',
     url: '/:key',
     schema: routeSchema.remove,
+    beforeHandler: verifyToken,
     handler: async (request, reply) => {
       const { key } = request.params;
       try {

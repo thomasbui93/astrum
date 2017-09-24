@@ -36,7 +36,6 @@ const schema = new Schema({
             cb(false, `An unexpected error happened: ${error.toString()}`);
           });
       },
-      // Default error message, overridden by 2nd argument to `cb()` above
       message: 'Path should be correct'
     }
   },
