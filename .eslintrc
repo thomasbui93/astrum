@@ -1,13 +1,14 @@
 {
   "plugins": [
-    "node"
+    "node",
+    "async-await"
   ],
   "extends": [
     "airbnb-base/legacy",
     "plugin:node/recommended"
   ],
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 8,
     "sourceType": "module"
   },
   "rules": {

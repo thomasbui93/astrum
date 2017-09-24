@@ -12,21 +12,24 @@
       "200": {
         "type": "object",
         "properties": {
-          "notes": {
+          "categories": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "title": {
+                "name": {
                   "type": "string"
                 },
-                "content": {
+                "description": {
                   "type": "string"
                 },
-                "tags": {
+                "url": {
                   "type": "string"
                 },
-                "category": {
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
                   "type": "string"
                 }
               }
@@ -54,21 +57,30 @@
       "200": {
         "type": "object",
         "properties": {
-          "note": {
+          "category": {
             "type": "object",
             "properties": {
-              "title": {
+              "name": {
                 "type": "string"
               },
-              "content": {
+              "description": {
                 "type": "string"
               },
-              "tags": {
+              "url": {
                 "type": "string"
               },
-              "category": {
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
                 "type": "string"
               }
+            }
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "object"
             }
           }
         }
@@ -88,8 +100,19 @@
       "200": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "boolean"
+          "category": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            }
           }
         }
       },
@@ -107,16 +130,16 @@
     "body": {
       "type": "object",
       "properties": {
-        "title": {
+        "name": {
           "type": "string"
         },
-        "content": {
+        "description": {
           "type": "string"
         },
-        "tags": {
+        "path": {
           "type": "string"
         },
-        "category": {
+        "key": {
           "type": "string"
         }
       }
@@ -125,19 +148,16 @@
       "200": {
         "type": "object",
         "properties": {
-          "status": {
+          "category": {
             "type": "object",
             "properties": {
-              "title": {
+              "name": {
                 "type": "string"
               },
-              "content": {
+              "description": {
                 "type": "string"
               },
-              "tags": {
-                "type": "string"
-              },
-              "category": {
+              "url": {
                 "type": "string"
               }
             }
@@ -147,7 +167,7 @@
       "400": {
         "type": "object",
         "properties": {
-          "errors": {
+          "error": {
             "type": "string"
           }
         }
@@ -159,20 +179,23 @@
       "200": {
         "type": "object",
         "properties": {
-          "note": {
+          "category": {
             "type": "object",
             "properties": {
-              "title": {
+              "name": {
                 "type": "string"
               },
-              "content": {
+              "description": {
                 "type": "string"
               },
-              "tags": {
+              "key": {
                 "type": "string"
               },
-              "category": {
-                "type": "string"
+              "notes": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
               }
             }
           }
@@ -181,7 +204,7 @@
       "400": {
         "type": "object",
         "properties": {
-          "errors": {
+          "error": {
             "type": "string"
           }
         }

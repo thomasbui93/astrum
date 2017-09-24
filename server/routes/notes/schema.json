@@ -24,10 +24,29 @@
                   "type": "string"
                 },
                 "tags": {
-                  "type": "string"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "key": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "category": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -37,7 +56,7 @@
       "400": {
         "type": "object",
         "properties": {
-          "errors": {
+          "error": {
             "type": "string"
           }
         }
@@ -64,10 +83,29 @@
                 "type": "string"
               },
               "tags": {
-                "type": "string"
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "key": {
+                      "type": "string"
+                    }
+                  }
+                }
               },
               "category": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -96,7 +134,7 @@
       "400": {
         "type": "object",
         "properties": {
-          "errors": {
+          "error": {
             "type": "string"
           }
         }
@@ -113,6 +151,9 @@
         "content": {
           "type": "string"
         },
+        "key": {
+          "type": "string"
+        },
         "tags": {
           "type": "string"
         },
@@ -126,28 +167,14 @@
         "type": "object",
         "properties": {
           "status": {
-            "type": "object",
-            "properties": {
-              "title": {
-                "type": "string"
-              },
-              "content": {
-                "type": "string"
-              },
-              "tags": {
-                "type": "string"
-              },
-              "category": {
-                "type": "string"
-              }
-            }
+            "type": "boolean"
           }
         }
       },
       "400": {
         "type": "object",
         "properties": {
-          "errors": {
+          "error": {
             "type": "string"
           }
         }
@@ -168,11 +195,33 @@
               "content": {
                 "type": "string"
               },
-              "tags": {
+              "key": {
                 "type": "string"
               },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "key": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
               "category": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
