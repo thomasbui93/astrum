@@ -1,6 +1,6 @@
 import routeSchema from './schema.json';
 import TagApi from '../../models/notes/tag';
-import {verifyToken} from "../../services/notes/user-service";
+import { verifyToken } from '../../services/notes/user-service';
 
 export default (app, options, next) => {
   /**

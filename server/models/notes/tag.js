@@ -34,15 +34,15 @@ class TagSchema {
    * @param keys
    * @return {Promise.<*>}
    */
-  static async convertKeysToIds(keys){
-    if(!keys){
+  static async convertKeysToIds(keys) {
+    if (!keys) {
       return false;
     }
     keys = keys.split(',').map(key => key.trim());
     try {
-      const tags = await this.find({key: { $in: keys}}).select('_id');
+      const tags = await this.find({ key: { $in: keys } }).select('_id');
       return [... new Set(tags.map(tag => tag._id))];
-    } catch (err){
+    } catch (err) {
       return false;
     }
   }
@@ -53,7 +53,7 @@ schema.plugin(timestamps);
 schema.plugin(paginate);
 schema.plugin(beautifyUnique);
 
-schema.pre('save', function(next){
+schema.pre('save', function (next) {
   this.key = this.key ? this.key : `${this.name.toLowerCase().split(' ').join('-')}-${shortid.generate()}`;
   next();
 });

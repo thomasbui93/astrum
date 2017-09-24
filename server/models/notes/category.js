@@ -17,7 +17,6 @@ const schema = new Schema({
   path: {
     type: String,
     validate: {
-      isAsync: true,
       validator(value, cb) {
         if (!value) {
           return cb(true, '');
@@ -63,15 +62,15 @@ class CategorySchema {
     return noteApi.findByCategoryKey(this.key);
   }
 
-  static async convertKeysToIds(keys){
-    if(!keys){
+  static async convertKeysToIds(keys) {
+    if (!keys) {
       return false;
     }
     keys = keys.split(',').map(key => key.trim());
     try {
-      const categories = await this.find({key: { $in: keys}}).select('_id');
+      const categories = await this.find({ key: { $in: keys } }).select('_id');
       return [... new Set(categories.map(tag => tag._id))];
-    } catch (err){
+    } catch (err) {
       return false;
     }
   }
@@ -82,7 +81,7 @@ schema.plugin(timestamps);
 schema.plugin(paginate);
 schema.plugin(beautifyUnique);
 
-schema.pre('save', function(next) {
+schema.pre('save', function (next) {
   this.key = this.key ? this.key :
     `${this.name.toLowerCase().split(' ').join('-')}-${shortid.generate()}`;
   next();

@@ -1,8 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 import timestamps from 'mongoose-timestamp';
 import bcrypt from 'bcrypt';
-import {readConfigPath} from "../../utils/config-reader";
-import {userCount} from "../../services/notes/user-service"
+import { readConfigPath } from '../../utils/config-reader';
+import { userCount } from '../../services/notes/user-service';
 import jwt from 'jsonwebtoken';
 
 const salt = readConfigPath('credential.hashing.salt');
@@ -12,15 +12,15 @@ const generatePasswordHash = password =>{
 };
 
 const schema = new Schema({
-  username:{
+  username: {
     type: String,
     validate: {
       validator(value, cb) {
-        if(!value){
+        if (!value) {
           cb(false, 'This is required field.');
         }
 
-        if(value.trim().indexOf(' ') > -1){
+        if (value.trim().indexOf(' ') > -1) {
           cb(false, 'The username is invalid.');
         }
 
@@ -30,7 +30,7 @@ const schema = new Schema({
           })
           .catch(function () {
             cb(false, 'There is an error during the validation process.');
-          })
+          });
       }
     }
   },
@@ -38,7 +38,7 @@ const schema = new Schema({
     type: String,
     required: true,
     validate: {
-      validator(value, cb){
+      validator(value, cb) {
         const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         cb(emailRegex.test(value), 'Email is not in the correct format.');
       }
@@ -62,56 +62,57 @@ const schema = new Schema({
 class CategorySchema {
   static async checkPassword(username, password) {
     try {
-      const user = await this.findOne({username: username}).select({username: 1, _id: 1, password: 1});
-      if(!user){
+      const user = await this.findOne({ username: username })
+        .select({ username: 1, _id: 1, password: 1 });
+      if (!user) {
         return false;
       }
       const isAuthenticated = bcrypt.compareSync(password, user.password);
       const jwtTokenSecret = readConfigPath('credential.token');
-      if(!isAuthenticated || !jwtTokenSecret){
+      if (!isAuthenticated || !jwtTokenSecret) {
         return false;
       }
 
-      const token = jwt.sign(user.toObject(), jwtTokenSecret,{
-        expiresIn: 60*60*24
+      const token = jwt.sign(user.toObject(), jwtTokenSecret, {
+        expiresIn: 60 * 60 * 24
       });
 
-      await this.update({username: username}, {token: token});
+      await this.update({ username: username }, { token: token });
       return token;
     } catch (err) {
       return false;
     }
   }
 
-  static async logout(){
+  static async logout() {
     try {
-      await this.update({token: ''});
+      await this.update({ token: '' });
       return true;
-    } catch (error){
+    } catch (error) {
       return false;
     }
   }
 
   static async changePassword(userId, password, oldPassword) {
     try {
-      let user = await this.findById(userId).select({username: 1, _id: 1, password: 1});
-      if(!user){
+      let user = await this.findById(userId).select({ username: 1, _id: 1, password: 1 });
+      if (!user) {
         return false;
       }
 
       const isAuthenticated = bcrypt.compareSync(oldPassword, user.password);
       const jwtTokenSecret = readConfigPath('credential.token');
-      if(!isAuthenticated || !jwtTokenSecret){
+      if (!isAuthenticated || !jwtTokenSecret) {
         return false;
       }
 
-      user = await this.findByIdAndUpdate(user._id, { password:  generatePasswordHash(password)});
+      user = await this.findByIdAndUpdate(user._id, { password: generatePasswordHash(password) });
 
-      const token = jwt.sign(user.toObject(), jwtTokenSecret,{
-        expiresIn: 60*60*24
+      const token = jwt.sign(user.toObject(), jwtTokenSecret, {
+        expiresIn: 60 * 60 * 24
       });
 
-      await this.findByIdAndUpdate(user._id, { token:  token });
+      await this.findByIdAndUpdate(user._id, { token: token });
 
       return token;
     } catch (err) {
@@ -123,7 +124,7 @@ class CategorySchema {
 schema.loadClass(CategorySchema);
 schema.plugin(timestamps);
 
-schema.pre('save', function(next) {
+schema.pre('save', function (next) {
   this.password = generatePasswordHash(this.password);
   next();
 });

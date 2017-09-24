@@ -2,7 +2,7 @@ import routeSchema from './schema.json';
 import NoteApi from '../../models/notes/note';
 import TagApi from '../../models/notes/tag';
 import CategoryApi from '../../models/notes/category';
-import {verifyToken} from "../../services/notes/user-service";
+import { verifyToken } from '../../services/notes/user-service';
 
 export default (app, options, next) => {
   /**
@@ -14,9 +14,9 @@ export default (app, options, next) => {
     schema: routeSchema.index,
     beforeHandler: verifyToken,
     handler: async (request, reply) => {
-      const { page = 1} = request.query;
+      const { page = 1 } = request.query;
       try {
-        const { docs } = await NoteApi.findAll({page: page});
+        const { docs } = await NoteApi.findAll({ page: page });
         return { notes: docs };
       } catch (err) {
         reply.code(400);

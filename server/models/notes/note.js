@@ -84,11 +84,10 @@ class NoteSchema {
    * @return {Query|Promise|Document|*}
    */
   static findAll(options = {}) {
-    console.log(options);
     const { page = 1, limit = 5 } = options;
     return this.paginate({}, {
       page: page,
-      limit: limit ,
+      limit: limit,
       sort: { createdAt: -1 },
       populate: [
         {
@@ -118,7 +117,7 @@ schema.loadClass(NoteSchema);
 schema.plugin(timestamps);
 schema.plugin(paginate);
 schema.plugin(beautifyUnique);
-schema.index({title: 'text', content: 'text'}, {"weights": { title: 2, content:1 }});
+schema.index({ title: 'text', content: 'text' }, { weights: { title: 2, content: 1 } });
 
 schema.pre('save', function (next) {
   this.key = this.key ? this.key : `${this.title.toLowerCase().split(' ').join('-')}-${shortid.generate()}`;

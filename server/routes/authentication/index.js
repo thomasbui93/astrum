@@ -1,6 +1,6 @@
 import routeSchema from './schema.json';
 import UserApi from '../../models/user/user';
-import {verifyToken} from "../../services/notes/user-service";
+import { verifyToken } from '../../services/notes/user-service';
 
 export default (app, options, next) => {
   /**
@@ -12,16 +12,16 @@ export default (app, options, next) => {
     schema: routeSchema.login,
     handler: async (request, reply) => {
       try {
-        const {username, password} = request.body;
+        const { username, password } = request.body;
         const token = await UserApi.checkPassword(username, password);
         if (!token) {
-          return {status: false}
+          return { status: false };
         }
 
-        return {status: true, token: token}
+        return { status: true, token: token };
       } catch (err) {
         reply.code(400);
-        return {error: err.toString()};
+        return { error: err.toString() };
       }
     }
   });
@@ -37,10 +37,10 @@ export default (app, options, next) => {
       try {
         const user = new UserApi(request.body);
         await user.save();
-        return {status: true};
+        return { status: true };
       } catch (err) {
         reply.code(400);
-        return {error: err.toString()};
+        return { error: err.toString() };
       }
     }
   });
@@ -56,12 +56,12 @@ export default (app, options, next) => {
     handler: async (request, reply) => {
       try {
         const id = request.decoded._id;
-        const user = await UserApi.findByIdAndUpdate(id, request.body, {new: true, runValidators: true});
-        return {user: user};
+        const user = await UserApi.findByIdAndUpdate(id, request.body, { new: true, runValidators: true });
+        return { user: user };
       } catch (err) {
         console.log(err);
         reply.code(400);
-        return {error: err.toString()};
+        return { error: err.toString() };
       }
     }
   });
@@ -77,17 +77,17 @@ export default (app, options, next) => {
     handler: async (request, reply) => {
       try {
         const id = request.decoded._id;
-        const {password, oldPassword} = request.body;
+        const { password, oldPassword } = request.body;
         const token = await UserApi.changePassword(id, password, oldPassword);
         if (!token) {
           reply.code(400);
-          return {error: 'Authorization is not correct.'};
+          return { error: 'Authorization is not correct.' };
         }
-        return {token: token};
+        return { token: token };
       } catch (err) {
         console.log(err);
         reply.code(400);
-        return {error: err.toString()};
+        return { error: err.toString() };
       }
     }
   });
@@ -103,13 +103,13 @@ export default (app, options, next) => {
     handler: async (request, reply) => {
       try {
         await UserApi.logout();
-        return {status: true};
+        return { status: true };
       } catch (err) {
         reply.code(400);
-        return {error: err.toString()};
+        return { error: err.toString() };
       }
     }
   });
 
   next();
-}
+};

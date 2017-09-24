@@ -1,6 +1,6 @@
 import routeSchema from './schema.json';
 import CategoryApi from '../../models/notes/category';
-import {verifyToken} from "../../services/notes/user-service";
+import { verifyToken } from '../../services/notes/user-service';
 export default (app, options, next) => {
   /**
    * Get collection of categories
