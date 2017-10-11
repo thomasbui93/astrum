@@ -6,6 +6,12 @@
       },
       "size": {
         "type": "integer"
+      },
+      "sort": {
+        "type": "string"
+      },
+      "desc": {
+        "type": "boolean"
       }
     },
     "response": {
@@ -31,7 +37,24 @@
                 },
                 "updatedAt": {
                   "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
                 }
+              }
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "current": {
+                "type": "integer"
+              },
+              "next": {
+                "type": "integer"
+              },
+              "prev": {
+                "type": "integer"
               }
             }
           }

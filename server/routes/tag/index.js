@@ -1,6 +1,6 @@
 import routeSchema from './schema.json';
 import TagApi from '../../models/notes/tag';
-import { verifyToken } from '../../services/notes/user-service';
+import {verifyToken} from '../../services/notes/user-service';
 
 export default (app, options, next) => {
   /**
@@ -12,12 +12,39 @@ export default (app, options, next) => {
     schema: routeSchema.index,
     beforeHandler: verifyToken,
     handler: async (request, reply) => {
+      const {page, size, sort, desc} = request.query;
+      let sortOption = {};
+
+      if(sort){
+        sortOption[sort] = desc ? 1 : -1;
+      }
+
+      sortOption.length === 0 ? sortOption = undefined : '';
+
       try {
-        const { docs } = await TagApi.findAll();
-        return { tags: docs };
+        const {
+          docs,
+          total,
+          limit,
+          offset
+        } = await TagApi.findAll({
+          page: page,
+          size: size,
+          sort: sortOption
+        });
+
+        const currentPage = offset / limit + 1;
+        return {
+          tags: docs,
+          pagination: {
+            current: currentPage,
+            next: total > currentPage * limit ? currentPage + 1: 0,
+            prev: currentPage > 1 ? currentPage - 1: 0
+          }
+        };
       } catch (err) {
         reply.code(400);
-        return { error: err.toString() };
+        return {error: err.toString()};
       }
     }
   });
@@ -31,17 +58,17 @@ export default (app, options, next) => {
     schema: routeSchema.read,
     beforeHandler: verifyToken,
     handler: async (request, reply) => {
-      const { key } = request.params;
+      const {key} = request.params;
       try {
-        const tag = await TagApi.findOne({ key: key });
+        const tag = await TagApi.findOne({key: key});
         if (!tag) {
           reply.code(404);
-          return { error: 'No tag is not found' };
+          return {error: 'No tag is not found'};
         }
-        return { tag: tag };
+        return {tag: tag};
       } catch (err) {
         reply.code(400);
-        return { error: err.toString() };
+        return {error: err.toString()};
       }
     }
   });
@@ -58,10 +85,10 @@ export default (app, options, next) => {
       try {
         const tag = new TagApi(request.body);
         await tag.save();
-        return { tag: tag };
+        return {tag: tag};
       } catch (err) {
         reply.code(400);
-        return { error: err.toString() };
+        return {error: err.toString()};
       }
     }
   });
@@ -75,13 +102,13 @@ export default (app, options, next) => {
     schema: routeSchema.update,
     beforeHandler: verifyToken,
     handler: async (request, reply) => {
-      const { key } = request.params;
+      const {key} = request.params;
       try {
-        await TagApi.updateOne({ key: key }, { $set: request.body });
-        return { status: true };
+        await TagApi.updateOne({key: key}, {$set: request.body});
+        return {status: true};
       } catch (err) {
         reply.code(400);
-        return { error: err.toString() };
+        return {error: err.toString()};
       }
     }
   });
@@ -95,13 +122,13 @@ export default (app, options, next) => {
     schema: routeSchema.remove,
     beforeHandler: verifyToken,
     handler: async (request, reply) => {
-      const { key } = request.params;
+      const {key} = request.params;
       try {
-        await TagApi.findOneAndRemove({ key: key });
-        return { status: true };
+        await TagApi.findOneAndRemove({key: key});
+        return {status: true};
       } catch (err) {
         reply.code(400);
-        return { error: err.toString() };
+        return {error: err.toString()};
       }
     }
   });
@@ -117,10 +144,10 @@ export default (app, options, next) => {
     handler: async (request, reply) => {
       try {
         await TagApi.remove();
-        return { status: true };
+        return {status: true};
       } catch (err) {
         reply.code(400);
-        return { error: err.toString() };
+        return {error: err.toString()};
       }
     }
   });

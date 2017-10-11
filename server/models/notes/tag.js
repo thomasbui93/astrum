@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 import timestamps from 'mongoose-timestamp';
 import paginate from 'mongoose-paginate';
 import beautifyUnique from 'mongoose-beautiful-unique-validation';
@@ -24,13 +24,37 @@ const schema = new Schema({
 });
 
 class TagSchema {
-  static findAll(options = {}) {
-    const { page = 1, size = 10 } = options;
-    return this.paginate({}, { page: page, size: size });
+  static getDefaultPaginationConfig() {
+    return {
+      DEFAULT_SIZE: 10,
+      DEFAULT_PAGE: 1,
+      DEFAULT_SORT: {
+        createdAt: -1
+      }
+    }
   }
 
+  static findAll(options = {}, query = {}) {
+    const defaultConfig = this.getDefaultPaginationConfig();
+    const {
+      page = defaultConfig.DEFAULT_PAGE,
+      size = defaultConfig.DEFAULT_SIZE,
+      sort = defaultConfig.DEFAULT_SORT
+    } = options;
+
+    const offset = page - 1 >= 0 ? size * (page - 1) : 0;
+
+    return this.paginate({}, {
+      page: page,
+      offset: offset,
+      limit: size,
+      sort: sort
+    });
+  }
+
+
   /**
-   * cCnvert tags key to ids
+   * Convert tags key to ids
    * @param keys
    * @return {Promise.<*>}
    */
@@ -40,7 +64,7 @@ class TagSchema {
     }
     keys = keys.split(',').map(key => key.trim());
     try {
-      const tags = await this.find({ key: { $in: keys } }).select('_id');
+      const tags = await this.find({key: {$in: keys}}).select('_id');
       return [... new Set(tags.map(tag => tag._id))];
     } catch (err) {
       return false;
