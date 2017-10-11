@@ -12,6 +12,9 @@
       },
       "desc": {
         "type": "boolean"
+      },
+      "searchKey": {
+        "type": "string"
       }
     },
     "response": {

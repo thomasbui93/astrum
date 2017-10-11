@@ -12,15 +12,14 @@ export default (app, options, next) => {
     schema: routeSchema.index,
     beforeHandler: verifyToken,
     handler: async (request, reply) => {
-      const {page, size, sort, desc} = request.query;
+      const {page, size, sort, desc, searchKey} = request.query;
       let sortOption = {};
 
-      if(sort){
+      if (sort) {
         sortOption[sort] = desc ? 1 : -1;
       }
 
       sortOption.length === 0 ? sortOption = undefined : '';
-
       try {
         const {
           docs,
@@ -30,16 +29,16 @@ export default (app, options, next) => {
         } = await TagApi.findAll({
           page: page,
           size: size,
-          sort: sortOption
-        });
+          sort: sortOption,
+        }, searchKey ? {queryKey: searchKey} : {});
 
         const currentPage = offset / limit + 1;
         return {
           tags: docs,
           pagination: {
             current: currentPage,
-            next: total > currentPage * limit ? currentPage + 1: 0,
-            prev: currentPage > 1 ? currentPage - 1: 0
+            next: total > currentPage * limit ? currentPage + 1 : 0,
+            prev: currentPage > 1 ? currentPage - 1 : 0
           }
         };
       } catch (err) {

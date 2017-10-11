@@ -44,12 +44,19 @@ class TagSchema {
 
     const offset = page - 1 >= 0 ? size * (page - 1) : 0;
 
-    return this.paginate({}, {
+    const {queryKey} = query;
+    const scoreData = queryKey ? {score: {$meta: 'textScore'}} : {};
+    const pagination = {
       page: page,
       offset: offset,
       limit: size,
-      sort: sort
-    });
+      sort: Object.assign({}, sort, scoreData)
+    }
+    return queryKey ? this.paginate(
+      {$text: {$search: queryKey}},
+      scoreData,
+      pagination
+    ) : this.paginate({}, pagination);
   }
 
 
@@ -76,6 +83,12 @@ schema.loadClass(TagSchema);
 schema.plugin(timestamps);
 schema.plugin(paginate);
 schema.plugin(beautifyUnique);
+schema.index({
+  'name': 'text',
+  'description': 'text'
+}, {
+  weights: {'name': 5, 'description': 2}
+})
 
 schema.pre('save', function (next) {
   this.key = this.key ? this.key : `${this.name.toLowerCase().split(' ').join('-')}-${shortid.generate()}`;
