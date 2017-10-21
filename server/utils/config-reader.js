@@ -35,6 +35,7 @@ export const readConfigPath = (path, delimiter = '.') => {
 export const getDatabaseConfig = key => {
   try {
     const config = getConfig();
+    console.log(config);
     const databaseConfig = config.database;
     return databaseConfig[key];
   } catch (error) {

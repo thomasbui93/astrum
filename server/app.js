@@ -6,6 +6,9 @@ import routeApi from "./routes/index";
 connectDatabase()
   .then(result => {
     console.log('Connected to database');
+  })
+  .catch(err => {
+    console.log(err);
   });
 
 const app = fastify();

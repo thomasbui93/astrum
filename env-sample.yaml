@@ -1,0 +1,8 @@
+
+database:
+  mongo:
+    host: localhost
+    port: 27017
+    name: astrum
+    username: astrum
+    password: astrum
